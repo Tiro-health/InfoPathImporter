@@ -7,8 +7,7 @@ function App() {
 
   useEffect(() => {
     if (window.launchQueue) {
-      window.launchQueue.setConsumer((launchParams) => {
-        console.log("launchParams", launchParams);
+      const launchHandler = (launchParams: LaunchParams) => {
         const files = launchParams.files.filter(
           (params) => params.kind == "file",
         );
@@ -20,7 +19,8 @@ function App() {
         );
         const directoryNames = directories.map((params) => params.name);
         setDirectoryNames(directoryNames);
-      });
+      };
+      window.launchQueue.setConsumer(launchHandler);
     }
   });
 

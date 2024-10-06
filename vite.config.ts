@@ -42,6 +42,7 @@ export default defineConfig({
             action: "/",
             accept: {
               "text/fhir+json": [".json"],
+              "application/vnd.ms-cab-compressed": [".xsn"],
             },
           },
         ],
