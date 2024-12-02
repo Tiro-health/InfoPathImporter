@@ -3,11 +3,10 @@ import "./App.css";
 
 function App() {
   const [fileNames, setFileNames] = useState<string[]>([]);
-  const [fileSizes, setFileSizes] = useState<number[]>([]);
-
+  const [statusCode, setStatusCode] = useState<number | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    // Set environment variables
     if (window.launchQueue) {
       const launchHandler = async (launchParams: LaunchParams) => {
         const files = launchParams.files.filter(
@@ -23,10 +22,8 @@ function App() {
           })
         );
 
-        const fileSizes = fileDetails.map((file) => file.size);
-        setFileSizes(fileSizes);
-        console.log("Doing POST to:")
-        console.log(`${import.meta.env.VITE_SERVER_URL}/kws/upload-xsnITE_SERVER_URL/kws/upload-xsn`);
+        console.log("Doing POST to:");
+        console.log(`${import.meta.env.VITE_SERVER_URL}/kws/upload-xsn`);
 
         // Make the REST call
         fileDetails.forEach((file) => {
@@ -41,9 +38,18 @@ function App() {
             },
             body: formData,
           })
-            .then((response) => response.json())
-            .then((data) => console.log(data))
-            .catch((error) => console.error("Error:", error));
+            .then((response) => {
+              setStatusCode(response.status); // Update state with status code
+              return response.json();
+            })
+            .then((data) => {
+              console.log(data);
+              setErrorMessage(null); // Clear any previous error message
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              setErrorMessage(error.message); // Update state with error message
+            });
         });
       };
       window.launchQueue.setConsumer(launchHandler);
@@ -53,12 +59,25 @@ function App() {
   return (
     <div>
       <h1>Infopath Importer v0.0.0</h1>
-      <p>Found {fileNames.length} file(s)</p>
-      <ul>
-        {fileNames.map((fileName, index) => (
-          <li key={fileName}>name={fileName}, size={fileSizes[index]} bytes</li>
-        ))}
-      </ul>
+      <p>Uploaded {fileNames.length} file(s)</p>
+      <table>
+        <thead>
+          <tr>
+            <th>File Name</th>
+            <th>Status Code</th>
+            <th>Error Message</th>
+          </tr>
+        </thead>
+        <tbody>
+          {fileNames.map((fileName) => (
+            <tr key={fileName}>
+              <td>{fileName}</td>
+              <td>{statusCode}</td>
+              <td>{errorMessage}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
