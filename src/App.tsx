@@ -5,8 +5,27 @@ function App() {
   const [fileNames, setFileNames] = useState<string[]>([]);
   const [statusCode, setStatusCode] = useState<number | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [warningMessage, setWarningMessage] = useState<string | null>(null);
 
   useEffect(() => {
+    // Detect browser and check for PWA support
+    const isPwaSupported = () => {
+      const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+      const isEdge = /Edg/.test(navigator.userAgent);
+      const isSafari = /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
+      const isFirefox = /Firefox/.test(navigator.userAgent);
+
+      if (isFirefox) {
+        return false; // Firefox does not fully support PWA features
+      }
+
+      return isChrome || isEdge || isSafari;
+    };
+
+    if (!isPwaSupported()) {
+      setWarningMessage("Your browser does not fully support PWA features. Please use Chrome, Edge, or Safari for the best experience.");
+    }
+
     if (window.launchQueue) {
       const launchHandler = async (launchParams: LaunchParams) => {
         const files = launchParams.files.filter(
@@ -59,25 +78,31 @@ function App() {
   return (
     <div>
       <h1>Infopath Importer v0.0.0</h1>
-      <p>Uploaded {fileNames.length} file(s)</p>
-      <table>
-        <thead>
-          <tr>
-            <th>File Name</th>
-            <th>Status Code</th>
-            <th>Error Message</th>
-          </tr>
-        </thead>
-        <tbody>
-          {fileNames.map((fileName) => (
-            <tr key={fileName}>
-              <td>{fileName}</td>
-              <td>{statusCode}</td>
-              <td>{errorMessage}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {warningMessage ? (
+        <p style={{ color: 'red' }}>{warningMessage}</p>
+      ) : (
+        <>
+            <p>Uploaded {fileNames.length} file(s)</p>
+            <table>
+              <thead>
+                <tr>
+                  <th>File Name</th>
+                  <th>Status Code</th>
+                  <th>Error Message</th>
+                </tr>
+              </thead>
+              <tbody>
+                {fileNames.map((fileName) => (
+                  <tr key={fileName}>
+                    <td>{fileName}</td>
+                    <td>{statusCode}</td>
+                    <td>{errorMessage}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+        </>
+      )}
     </div>
   );
 }
