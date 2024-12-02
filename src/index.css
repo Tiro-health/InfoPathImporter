@@ -66,3 +66,60 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 1em;
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  min-width: 400px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+thead tr {
+  background-color: #646cff;
+  color: #ffffff;
+  text-align: left;
+}
+
+th,
+td {
+  padding: 12px 15px;
+}
+
+tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+
+tbody tr:last-of-type {
+  border-bottom: 2px solid #646cff;
+}
+
+tbody tr.active-row {
+  font-weight: bold;
+  color: #646cff;
+}
+
+@media (prefers-color-scheme: dark) {
+  table {
+    color: rgba(255, 255, 255, 0.87);
+    background-color: #242424;
+  }
+
+  thead tr {
+    background-color: #535bf2;
+  }
+
+  tbody tr:nth-of-type(even) {
+    background-color: #333333;
+  }
+
+  tbody tr:last-of-type {
+    border-bottom: 2px solid #535bf2;
+  }
+}
