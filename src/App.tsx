@@ -77,7 +77,7 @@ function App() {
 
   return (
     <div>
-      <h1>Infopath Importer v0.0.0</h1>
+      <h1>Infopath Importer v0.0.1</h1>
       {warningMessage ? (
         <p style={{ color: 'red' }}>{warningMessage}</p>
       ) : (
