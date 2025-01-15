@@ -1,3 +1,4 @@
+import basicSsl from '@vitejs/plugin-basic-ssl';
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
@@ -6,11 +7,16 @@ import { VitePWA } from "vite-plugin-pwa";
 export default defineConfig({
   plugins: [
     react(),
+    basicSsl(),
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: ["favicon.ico", "apple-touch-icon.png", "mask-icon.svg"],
+      injectRegister: "auto",
+      devOptions: {
+        enabled: true,
+        type: "module",
+      },
       manifest: {
-        name: "Atticus File Launcher",
+        name: "Atticus File Launcher v0.0.1",
         short_name: "Atticus",
         theme_color: "#ffffff",
         icons: [
